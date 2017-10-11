@@ -6,7 +6,6 @@ import android.util.Log;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -14,21 +13,18 @@ import io.reactivex.disposables.Disposable;
 public class MainActivity extends AppCompatActivity
 {
     private final String TAG = getClass().getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Observable.create(new ObservableOnSubscribe<Integer>()
+        Observable.create((ObservableEmitter<Integer> emitter) ->
         {
-            @Override
-            public void subscribe(@NonNull ObservableEmitter<Integer> emitter) throws Exception
-            {
-                emitter.onNext(1);
-                emitter.onNext(2);
-                emitter.onNext(3);
-                emitter.onComplete();
-            }
+            emitter.onNext(1);
+            emitter.onNext(2);
+            emitter.onNext(3);
+            emitter.onComplete();
         }).subscribe(new Observer<Integer>()
         {
             @Override
@@ -55,7 +51,5 @@ public class MainActivity extends AppCompatActivity
                 Log.e(TAG, "onComplete");
             }
         });
-
-
     }
 }
